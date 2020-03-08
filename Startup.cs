@@ -49,9 +49,20 @@ namespace mvc_trial
 
             app.UseEndpoints(endpoints =>
             {
+                // Homescreen route
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{controller=Home}/{action=Index}/");
+
+                // Image upload route
+                endpoints.MapControllerRoute(
+                    name: "image_upload_route",
+                    pattern: "{controller=Home}/{action=Timesheet}");
+
+                // Admin login route
+                endpoints.MapControllerRoute(
+                    name: "admin_login_route",
+                    pattern: "{controller=Admin}/{action=Login}/");
             });
         }
     }
