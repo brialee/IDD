@@ -63,8 +63,7 @@ namespace mvc_trial.Controllers
         }
 
         // Method to generate the connection string to remote SQL Server
-        // NOTE move db creds to something like a config file
-        // NOTE what would make sense as an argument to this method?
+        // TODO: Move db creds to something like a config file
         private string generate_conn_str()
         {
             string hostname = "clown-db-instance.cjq672cxkqss.us-west-2.rds.amazonaws.com";
@@ -77,6 +76,7 @@ namespace mvc_trial.Controllers
 
         // Returns a connection object to a remote SQL Server
         // NOTE add some try/catch goodness
+        // TODO: move this and all db related methods to their own files.
         private SqlConnection connect_to_db(string connection_string)
         {
             SqlConnection dbcon = new SqlConnection(connection_string);
@@ -161,23 +161,6 @@ namespace mvc_trial.Controllers
             return;
         }
 
-        // TODO: Is this necessary?
-        /*
-        private byte[] file_to_base64(IFormFile file)
-        {
-            using (var stream = new MemoryStream())
-            {
-
-                FileStream sFile = System.IO.File.Create(@"" + currentPath + file.FileName);
-                Debug.Write("Attempting to save file....");
-                file.CopyTo(sFile);
-                var fileAsBytes = stream.ToArray();
-                String basestring = Convert.ToBase64String(fileAsBytes);
-            }
-
-            return; 
-        }
-        */
 
         // Method to combine multiple submissions into a single object
         private void CombineSubmissions() { }

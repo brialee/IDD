@@ -14,14 +14,7 @@ namespace mvc_trial.Controllers
         [HttpPost("Admin")]
         public IActionResult Dashboard()
         {
-            // Create string from header values
-            string headers = String.Empty;
-            foreach(var key in Request.Headers.Keys)
-            {
-                headers += key + " -> " + Request.Headers[key] + "\n";
-            }
-            System.Diagnostics.Debug.WriteLine(headers);
-            ViewData["Headers"] = headers;
+            ViewData["Message"] = "Welcome-a-bird";
             return View();
         }
 
