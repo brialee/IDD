@@ -1,4 +1,6 @@
 <template>
+	<div>
+	<div v-if="formInProgress">
   <v-form
     class="mx-9"
     lazy-validation
@@ -261,6 +263,17 @@
       Reset Form
     </v-btn>
   </v-form>
+	</div>
+
+	<div v-if="submissionStatus">
+		<v-card>
+			<v-card-text>
+				<h1 class="text-center text-success">Your form has been submitted!</h1>
+				</v-card-text>
+			</v-card>
+	</div>
+
+	</div>
 </template>
 
 <script>
@@ -321,6 +334,8 @@ export default {
       openSubmittionDate: false,
       openEmployerSignDate: false,
       openProviderSignDate: false,
+			formInProgress: true,
+			submissionStatus: false,
 
     
 
@@ -339,6 +354,15 @@ export default {
   methods: {
     validate () {
       this.$refs.form.validate()
+			
+			//This will need to check if valide and if successful post to AppServer.
+			if(this.valid){
+				console.log('Submitting form')
+				this.formInProgress = false
+				this.submissionStatus = true
+			}
+				
+
     },
     reset () {
       this.$refs.form.reset()
