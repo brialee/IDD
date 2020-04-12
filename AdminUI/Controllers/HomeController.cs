@@ -12,6 +12,7 @@ using Amazon.DirectConnect.Model;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Internal;
 using SQLitePCL;
+using Microsoft.Extensions.Logging.Abstractions;
 
 namespace AdminUI.Controllers
 {
@@ -19,11 +20,17 @@ namespace AdminUI.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly TimesheetContext _context;
+        private TimesheetContext dbcontext;
 
         public HomeController(ILogger<HomeController> logger, TimesheetContext context)
         {
             _context = context;
             _logger = logger;
+        }
+
+        public HomeController(TimesheetContext dbcontext)
+        {
+            this.dbcontext = dbcontext;
         }
 
         public IActionResult Index(string sortOrder, string pName, string cName, string dateFrom, string dateTo, string prime, string id)
@@ -118,7 +125,6 @@ namespace AdminUI.Controllers
             return View(model);
         }
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
