@@ -97,7 +97,8 @@ import axios from 'axios'
 				this.files.splice(index, 1)
 			},
 			upload() {
-				console.log(this.files)
+        console.log(this.files)
+        console.log('https://iddappserver.azurewebsites.net/')
 				axios.post('https://iddappserver.azurewebsites.net/ImageUpload', this.files)
 			},
 			inputChanged() {
