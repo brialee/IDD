@@ -43,7 +43,7 @@
 </template>
 
 <script>
-import FileUploader from '@/components/Timesheet/FileUploader'
+import FileUploader from '@/components/Timesheet/FileUploader2'
 import IDDForm from '@/components/Timesheet/IDDForm'
 
 // MOCK .json data

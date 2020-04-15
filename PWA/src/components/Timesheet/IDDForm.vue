@@ -20,14 +20,14 @@
       :counter="25"
       :rules="nameRules"
     ></v-text-field>
-      
+
     <v-text-field
       filled
       label="Prime"
       v-model="formFields.prime"
       :counter="8"
     ></v-text-field>
-      
+
     <!-- Month, Year selector -->
     <v-menu
       min-width="290px"
@@ -46,14 +46,14 @@
           v-on="on"
         ></v-text-field>
       </template>
-      <v-date-picker 
-        type="month" 
+      <v-date-picker
+        type="month"
         v-model="formFields.submissionDate"
         @input="openSubmittedDate = false"
       ></v-date-picker>
     </v-menu>
     <!-- END Month, Year selector -->
-          
+
     <v-text-field
       filled
       label="Provider Name"
@@ -81,19 +81,19 @@
       label="CM Organization"
       v-model="formFields.CMOrg"
     ></v-text-field>
-    
+
     <v-text-field
       filled
       label="Service"
       v-model="formFields.service"
     ></v-text-field>
-    
+
     <!-- Table containing timesheet -->
     <FormTable
-      :entries="formFields.serviceDeliveredOn" 
+      :entries="formFields.serviceDeliveredOn"
     />
     <br/>
-    
+
     <v-text-field
       filled
       label="Total Hours"
@@ -105,7 +105,7 @@
     <p class="title">
       Back side of the form
     </p>
-    
+
     <v-textarea
       auto-grow
       filled
@@ -121,9 +121,9 @@
       rows="5"
       v-model="formFields.progressNotes"
     ></v-textarea>
-    
+
     <hr />
-    
+
     <!-- Employer Verification Section -->
     <p class="subtitle-1">
       <strong>RECIPIENT/EMPLOYER VERIFICATION:</strong><br/>
@@ -131,11 +131,11 @@
         I affirm that the data reported on this form is for actual
         dates/time worked by the provider delivering the service/supports
         listed to the recipient, that it does not exceed the total amount
-        of service authorized and was delivered according to the 
+        of service authorized and was delivered according to the
         recipient's service plan and provider/recipient service agreement.
       </em>
     </p>
-    
+
     <v-textarea
       auto-grow
       filled
@@ -162,14 +162,14 @@
           v-on="on"
         ></v-text-field>
       </template>
-      <v-date-picker 
+      <v-date-picker
         v-model="formFields.employerSignDate"
         @input="openEmployerSignDate = false"
       ></v-date-picker>
     </v-menu>
     <!-- End Date selector -->
     <!-- End Employer Verification Section -->
-  
+
     <hr />
 
     <!-- Provider Verification Section -->
@@ -179,15 +179,15 @@
         I affirm that the data reported on this form is for actual
         dates/time I worked delivering the service/supports
         listed to the recipient, that it does not exceed the total amount
-        of service authorized and was delivered according to the 
-        recipient's service plan and provider/recipient service 
+        of service authorized and was delivered according to the
+        recipient's service plan and provider/recipient service
         agreement. I further acknowledge that reporting dates/tim worked
         in excess of the amount of service authorized or not consistent
         with the recipient's service plan may be considered Medicaid
         Fraud.
       </em>
     </p>
-    
+
     <v-textarea
       auto-grow
       filled
@@ -214,7 +214,7 @@
           v-on="on"
         ></v-text-field>
       </template>
-      <v-date-picker 
+      <v-date-picker
         v-model="formFields.providerSignDate"
         @input="openProviderSignDate = false"
       ></v-date-picker>
@@ -223,7 +223,7 @@
     <!-- End Employee Verification Section -->
 
     <hr />
-    
+
     <strong class="subtitle-1">
       <v-checkbox
         label="I authorize the CDDP/Brokerage/CIIS staff to ender the
@@ -243,7 +243,7 @@
       Providers submit this completed/signed form to the CDDP, Brokerage
       or CIIS Program that authorized the service delivered.
     </strong>
-  
+
     <hr />
 
     <v-btn
@@ -282,7 +282,7 @@ import FormTable from '@/components/Timesheet/FormTable'
 export default {
   name: 'IDDForm',
   components: {
-    FormTable  
+    FormTable
   },
   props: {
     // A .json file that is the parsed uploaded IDD timesheet data
@@ -292,7 +292,7 @@ export default {
     }
   },
   // When this component has loaded onto the DOM, bind parsed form data
-  // to each IDD Timesheet form field 
+  // to each IDD Timesheet form field
   mounted: function () {
     if (this.entries !== null) {
       Object.entries(this.parsedFileData).forEach(([key, value]) => {
@@ -319,7 +319,7 @@ export default {
         service: '',
         serviceDeliveredOn: null,
         totalHours: 0,
-        
+
         // Back side of form
         serviceGoal: '',
         progressNotes: '',
@@ -329,7 +329,7 @@ export default {
         providerSignature: '',
         authorization: false,
         providerInitials: '',
-      }, 
+      },
 
       openSubmittionDate: false,
       openEmployerSignDate: false,
@@ -337,7 +337,7 @@ export default {
 			formInProgress: true,
 			submissionStatus: false,
 
-    
+
 
       valid: true,
       nameRules: [
@@ -353,15 +353,15 @@ export default {
   },
   methods: {
     validate () {
-      this.$refs.form.validate()
-			
+      //this.$refs.form.validate()
+
 			//This will need to check if valide and if successful post to AppServer.
 			if(this.valid){
 				console.log('Submitting form')
 				this.formInProgress = false
 				this.submissionStatus = true
 			}
-				
+
 
     },
     reset () {
