@@ -10,342 +10,259 @@
       Front side of the form
     </p>
 
-    <v-text-field
-      filled
-      label="Customer Name"
-      required
-      v-model="formFields.customerName"
-      :counter="25"
-      :rules="nameRules"
-    ></v-text-field>
-      
-    <v-text-field
-      filled
-      label="Prime"
-      v-model="formFields.prime"
-      :counter="8"
-    ></v-text-field>
-      
-    <!-- Month, Year selector -->
-    <v-menu
-      min-width="290px"
-      offset-y
-      transition="scale-transition"
-      v-model="openSubmittionDate"
-      :close-on-content-click="true"
-      :nudge-right="40"
-    >
-      <template v-slot:activator="{ on }">
-        <v-text-field
-          label="Pay Period Month and Year"
-          prepend-icon="event"
-          readonly
-          v-model="formFields.submissionDate"
-          v-on="on"
-        ></v-text-field>
-      </template>
-      <v-date-picker 
-        type="month" 
-        v-model="formFields.submissionDate"
-        @input="openSubmittedDate = false"
-      ></v-date-picker>
-    </v-menu>
-    <!-- END Month, Year selector -->
-          
-    <v-text-field
-      filled
-      label="Provider Name"
-      required
-      v-model="formFields.providerName"
-      :counter="25"
-      :rules="nameRules"
-    ></v-text-field>
-
-    <v-text-field
-      filled
-      label="Provider Num"
-      v-model="formFields.providerNumber"
-      :counter="6"
-    ></v-text-field>
-
-    <v-text-field
-      filled
-      label="SC/PA Name"
-      v-model="formFields['SC/PA Name']"
-    ></v-text-field>
-
-    <v-text-field
-      filled
-      label="CM Organization"
-      v-model="formFields.CMOrg"
-    ></v-text-field>
-    
-    <v-text-field
-      filled
-      label="Service"
-      v-model="formFields.service"
-    ></v-text-field>
-    
-    <!-- Table containing timesheet -->
-    <FormTable
-      :entries="formFields.serviceDeliveredOn" 
+    <FormField
+      v-for="field in [
+        'customerName',
+        'prime',
+        'submissionDate',
+        'providerName',
+        'providerNumber',
+        'SC/PA Name',
+        'CMOrg',
+        'service',
+      ]"
+      v-model="formFields[field].value"
+      v-bind="formFields[field]"
+      :key="field"
+      :reset="resetChild"
+      @disable-change="handleDisableChange(field, $event)"
     />
-    <br/>
-    
-    <v-text-field
-      filled
-      label="Total Hours"
-      v-model="formFields.totalHours"
-    ></v-text-field>
+
+    <!-- Table containing timesheet  -->
+    <v-card-text>
+      <FormTable
+        v-model="formFields.serviceDeliveredOn.value"
+        v-bind="formFields.serviceDeliveredOn"
+        :reset="resetChild"
+        @disable-change="handleDisableChange('serviceDeliveredOn', $event)"
+      />
+    </v-card-text>
+
+    <!-- totalHours -->
+    <FormField
+      v-model="formFields.totalHours.value"
+      v-bind="formFields.totalHours"
+      :reset="resetChild"
+      @disable-change="handleDisableChange('totalHours', $event)"
+    />
 
     <hr />
 
     <p class="title">
       Back side of the form
     </p>
-    
-    <v-textarea
-      auto-grow
-      filled
-      label="Service Goal"
-      rows="1"
-      v-model="formFields.service"
-    ></v-textarea>
 
-    <v-textarea
-      auto-grow
-      filled
-      label="Progress Notes"
-      rows="5"
-      v-model="formFields.progressNotes"
-    ></v-textarea>
-    
+    <FormField
+      v-for="field in ['serviceGoal', 'progressNotes']"
+      v-model="formFields[field].value"
+      v-bind="formFields[field]"
+      :key="field"
+      :reset="resetChild"
+      @disable-change="handleDisableChange(field, $event)"
+    />
+
     <hr />
-    
+
     <!-- Employer Verification Section -->
     <p class="subtitle-1">
-      <strong>RECIPIENT/EMPLOYER VERIFICATION:</strong><br/>
+      <strong>RECIPIENT/EMPLOYER VERIFICATION:</strong><br />
       <em>
-        I affirm that the data reported on this form is for actual
-        dates/time worked by the provider delivering the service/supports
-        listed to the recipient, that it does not exceed the total amount
-        of service authorized and was delivered according to the 
-        recipient's service plan and provider/recipient service agreement.
+        I affirm that the data reported on this form is for actual dates/time
+        worked by the provider delivering the service/supports listed to the
+        recipient, that it does not exceed the total amount of service
+        authorized and was delivered according to the recipient's service plan
+        and provider/recipient service agreement.
       </em>
     </p>
-    
-    <v-textarea
-      auto-grow
-      filled
-      label="Customer Employer or Employer Rep Signature"
-      rows="5"
-      v-model="formFields.employerSignature"
-    ></v-textarea>
 
-    <!-- Date selector -->
-    <v-menu
-      min-width="290px"
-      offset-y
-      transition="scale-transition"
-      v-model="openEmployerSignDate"
-      :close-on-content-click="false"
-      :nudge-right="40"
-    >
-      <template v-slot:activator="{ on }">
-        <v-text-field
-          label="Date"
-          prepend-icon="event"
-          readonly
-          v-model="formFields.employerSignDate"
-          v-on="on"
-        ></v-text-field>
-      </template>
-      <v-date-picker 
-        v-model="formFields.employerSignDate"
-        @input="openEmployerSignDate = false"
-      ></v-date-picker>
-    </v-menu>
-    <!-- End Date selector -->
+    <FormField
+      v-for="field in ['employerSignature', 'employerSignDate']"
+      v-model="formFields[field].value"
+      v-bind="formFields[field]"
+      :key="field"
+      :reset="resetChild"
+      @disable-change="handleDisableChange(field, $event)"
+    />
     <!-- End Employer Verification Section -->
-  
+
     <hr />
 
     <!-- Provider Verification Section -->
     <p class="subtitle-1">
-      <strong>PROVIDER/EMPLOYEE VERIFICATION:</strong><br/>
+      <strong>PROVIDER/EMPLOYEE VERIFICATION:</strong><br />
       <em>
-        I affirm that the data reported on this form is for actual
-        dates/time I worked delivering the service/supports
-        listed to the recipient, that it does not exceed the total amount
-        of service authorized and was delivered according to the 
-        recipient's service plan and provider/recipient service 
-        agreement. I further acknowledge that reporting dates/tim worked
-        in excess of the amount of service authorized or not consistent
-        with the recipient's service plan may be considered Medicaid
-        Fraud.
+        I affirm that the data reported on this form is for actual dates/time I
+        worked delivering the service/supports listed to the recipient, that it
+        does not exceed the total amount of service authorized and was delivered
+        according to the recipient's service plan and provider/recipient service
+        agreement. I further acknowledge that reporting dates/tim worked in
+        excess of the amount of service authorized or not consistent with the
+        recipient's service plan may be considered Medicaid Fraud.
       </em>
     </p>
-    
-    <v-textarea
-      auto-grow
-      filled
-      label="Provider/Employee Signature"
-      rows="5"
-      v-model="formFields.providerSignature"
-    ></v-textarea>
 
-    <!-- Date selector -->
-    <v-menu
-      min-width="290px"
-      offset-y
-      transition="scale-transition"
-      v-model="openProviderSignDate"
-      :close-on-content-click="false"
-      :nudge-right="40"
-    >
-      <template v-slot:activator="{ on }">
-        <v-text-field
-          label="Date"
-          prepend-icon="event"
-          readonly
-          v-model="formFields.providerSignDate"
-          v-on="on"
-        ></v-text-field>
-      </template>
-      <v-date-picker 
-        v-model="formFields.providerSignDate"
-        @input="openProviderSignDate = false"
-      ></v-date-picker>
-    </v-menu>
-    <!-- End Date selector -->
-    <!-- End Employee Verification Section -->
+    <FormField
+      v-for="field in ['providerSignature', 'providerSignDate']"
+      v-model="formFields[field].value"
+      v-bind="formFields[field]"
+      :key="field"
+      :reset="resetChild"
+      @disable-change="handleDisableChange(field, $event)"
+    />
+    <!-- END Provider Verification Section -->
 
     <hr />
-    
+
     <strong class="subtitle-1">
-      <v-checkbox
-        label="I authorize the CDDP/Brokerage/CIIS staff to ender the
-        data reported on this form into eXPRS on my behalf for claims
-        creation and payment."
-        v-model="formFields.authorization"
-      ></v-checkbox>
+      <FormField
+        v-for="field in ['authorization', 'providerInitials']"
+        v-model="formFields[field].value"
+        v-bind="formFields[field]"
+        :key="field"
+        :reset="resetChild"
+        @disable-change="handleDisableChange(field, $event)"
+      />
 
-      <v-textarea
-        auto-grow
-        filled
-        label="Provider Initials"
-        rows="1"
-        v-model="formFields.providerInitials"
-      ></v-textarea>
-
-      Providers submit this completed/signed form to the CDDP, Brokerage
-      or CIIS Program that authorized the service delivered.
+      Providers submit this completed/signed form to the CDDP, Brokerage or CIIS
+      Program that authorized the service delivered.
     </strong>
-  
+
     <hr />
 
-    <v-btn
-      color="success"
-      class="mr-4"
-      :disabled="!valid"
-      @click="validate"
-    >
-      Validate
+    <v-btn color="success" class="mr-4" :disabled="!valid" @click="submit">
+      Submit
     </v-btn>
 
-    <v-btn
-      color="error"
-      class="mr-4"
-      @click="reset"
-    >
+    <v-btn color="error" class="mr-4" @click="reset">
       Reset Form
     </v-btn>
   </v-form>
 </template>
 
 <script>
-import FormTable from '@/components/Timesheet/FormTable'
+import FormTable from "@/components/Timesheet/FormTable";
+import FormField from "@/components/Timesheet/FormField";
+import fieldData from "@/components/Timesheet/IDDFormFields.json";
+import rules from "@/components/Timesheet/FormRules.js";
 
 export default {
-  name: 'IDDForm',
+  name: "IDDForm",
   components: {
-    FormTable  
+    FormTable,
+    FormField,
   },
+
   props: {
     // A .json file that is the parsed uploaded IDD timesheet data
     parsedFileData: {
       type: Object,
-      default: null
-    }
+      default: null,
+    },
   },
-  // When this component has loaded onto the DOM, bind parsed form data
-  // to each IDD Timesheet form field 
-  mounted: function () {
-    if (this.entries !== null) {
-      Object.entries(this.parsedFileData).forEach(([key, value]) => {
-        if (key in this.formFields) {
-          this.formFields[key] = value;
-        } else {
-          console.log("Unrecognized parsed form field from server: " +
-          `${key} - ${value}`);
-        }
-      });
-    }
+
+  // Upon first loading on the page, bind parsed form data to each
+  // IDD Timesheet form field
+  created: function () {
+    this.initialize();
+
+    // Bind validation rules to each field that has a 'rules' string
+    // specified
+    Object.entries(fieldData).forEach(([key, value]) => {
+      if ("rules" in value) {
+        fieldData[key].rules = rules[fieldData[key].rules];
+      }
+    });
   },
+
   data: function () {
     return {
-      formFields: {
-        // Front side of form
-        customerName: '',
-        providerName: '',
-        submissionDate: new Date().toISOString().substr(0, 7),
-        prime: 0,
-        providerNumber: 0,
-        CMOrg: '',
-        'SC/PA Name': '',
-        service: '',
-        serviceDeliveredOn: null,
-        totalHours: 0,
-        
-        // Back side of form
-        serviceGoal: '',
-        progressNotes: '',
-        employerSignDate: new Date().toISOString().substr(0, 11),
-        employerSignature: '',
-        providerSignDate: new Date().toISOString().substr(0, 11),
-        providerSignature: '',
-        authorization: false,
-        providerInitials: '',
-      }, 
+      // Import form field structure data and store into local variable
+      formFields: fieldData,
 
-      openSubmittionDate: false,
-      openEmployerSignDate: false,
-      openProviderSignDate: false,
+      // Reset form of arbitrary value
+      resetChildField: false,
 
-    
+      // The amount of parsed fields that were edited
+      totalEdited: 0,
 
+      // Hide form validation error messages by default
       valid: true,
-      nameRules: [
-        v => !!v || 'Name is required',
-        v => (v && v.length <= 25) || 'Name must be less than 10 characters',
-      ],
-      email: '',
-      emailRules: [
-        v => !!v || 'E-mail is required',
-        v => /.+@.+\..+/.test(v) || 'E-mail must be valid',
-      ]
-    }
+    };
   },
+
+  computed: {
+    resetChild() {
+      return this.resetChildField;
+    },
+  },
+
   methods: {
-    validate () {
-      this.$refs.form.validate()
+    initialize() {
+      // Initialize some fields
+      this.totalEdited = 0;
+
+      // Bind data from a .json IDD timesheet to form fields
+      if (this.entries !== null) {
+        Object.entries(this.parsedFileData).forEach(([key, value]) => {
+          if (key in this.formFields) {
+            this.formFields[key]["parsed_value"] = value;
+            this.formFields[key]["value"] = value;
+            this.formFields[key]["disabled"] = true;
+          } else {
+            console.log(
+              "Unrecognized parsed form field from server: " +
+                `${key} - ${value}`
+            );
+          }
+        });
+      }
     },
-    reset () {
-      this.$refs.form.reset()
+
+    validateFormTable(hours) {
+      // TODO - Compare form table total hours with parsed total hours
+      hours;
     },
-    resetValidation () {
-      this.$refs.form.resetValidation()
+
+    submit() {
+      this.$refs.form.validate();
+    },
+
+    reset() {
+      // re-initialize values
+      this.initialize();
+      this.resetValidation();
+
+      // Change the value of this watched prop to force
+      // FormField components to reset
+      this.resetChildField = !this.resetChildField;
+    },
+
+    resetValidation() {
+      this.$refs.form.resetValidation();
+    },
+
+    // For a parsed field, send a warning if being edited
+    // Else, reset value to parsed value & disable field
+    resetParsed(field) {
+      if (this.formFields[field].parsed_value !== undefined) {
+        if (this.formFields[field].disabled !== true) {
+          this.formFields[field].value = this.formFields[field].parsed_value;
+          this.formFields[field].disabled = true;
+        }
+      }
+    },
+
+    // Update this component's disabled property
+    // Then, update the amount of parsed fields edited
+    handleDisableChange(fieldName, amtEdited) {
+      if (amtEdited > 0) {
+        this.formFields[fieldName].disabled = true;
+      } else {
+        this.formFields[fieldName].disabled = false;
+      }
+      this.totalEdited += amtEdited;
+      console.log(fieldName, amtEdited, "->", this.totalEdited);
     },
   },
-}
+};
 </script>
