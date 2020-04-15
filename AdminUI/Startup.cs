@@ -30,9 +30,9 @@ namespace AdminUI
             services.AddControllersWithViews();
             services.AddProgressiveWebApp();
             services.AddDbContext<TimesheetContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("LocalTestDB")));
+                options.UseSqlServer(Configuration.GetConnectionString("AzureDB")));
             services.AddDbContext<AdminAccountContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("LocalAdminAccountDB")));
+                options.UseSqlServer(Configuration.GetConnectionString("AzureDB")));
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<AdminAccountContext>();
             services.AddRazorPages();
