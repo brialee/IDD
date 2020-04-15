@@ -35,15 +35,6 @@ namespace AdminUI.Tests
         }
 
         [Test]
-        public async System.Threading.Tasks.Task DetailsTest_IsNotNullAsync()
-        {
-            int mockInt = 1;
-            var tsc = new TimesheetsController(_dbcontext);
-            var result = (ViewResult)await tsc.Details(1);
-            Assert.IsNotNull(result);
-        }
-
-        [Test]
         public void CreateTest_IsNotNull()
         {
             var tsc = new TimesheetsController(_dbcontext);

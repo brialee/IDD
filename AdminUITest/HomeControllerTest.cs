@@ -24,8 +24,8 @@ namespace AdminUI.Tests
         public HomeControllerTests()
         {
             _dbcontext = new InMemoryDbContextFactory().GetTimesheetContext();
-            _controller = new HomeController(_dbcontext);
             _logger = new NullLogger<HomeController>();
+            _controller = new HomeController(_logger, _dbcontext);
         }
 
        [Test]

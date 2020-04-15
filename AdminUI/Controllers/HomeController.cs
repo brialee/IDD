@@ -28,11 +28,6 @@ namespace AdminUI.Controllers
             _logger = logger;
         }
 
-        public HomeController(TimesheetContext dbcontext)
-        {
-            this.dbcontext = dbcontext;
-        }
-
         public IActionResult Index(string sortOrder, string pName, string cName, string dateFrom, string dateTo, string prime, string id)
         {
             var sheets = GetSheets();

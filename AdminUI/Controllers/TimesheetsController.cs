@@ -40,6 +40,7 @@ namespace AdminUI.Controllers
                 return NotFound();
             }
 
+            Console.WriteLine(View(timesheet));
             return View(timesheet);
         }
 
