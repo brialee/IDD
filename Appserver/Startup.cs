@@ -9,7 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
-namespace mvc_trial
+namespace Appserver
 {
     public class Startup
     {
@@ -26,6 +26,7 @@ namespace mvc_trial
             services.AddControllersWithViews();
             services.AddProgressiveWebApp();
             services.AddCors();
+            services.AddControllers().AddNewtonsoftJson();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -67,6 +68,26 @@ namespace mvc_trial
                 endpoints.MapControllerRoute(
                     name: "admin_login_route",
                     pattern: "{controller=Admin}/{action=Login}/");
+
+                // Check if Timesheet Ready
+                endpoints.MapControllerRoute(
+                    name: "timesheet_ready_route",
+                    pattern: "{controller=Timesheet}/{action=Ready}/");
+
+                // Validate Timesheet
+                endpoints.MapControllerRoute(
+                    name: "timesheet_validate_route",
+                    pattern: "{controller=Timesheet}/{action=Validate}/");
+
+                // Submit Timesheet
+                endpoints.MapControllerRoute(
+                    name: "timesheet_submit_route",
+                    pattern: "{controller=Timesheet}/{action=Submit}/");
+
+                // Check Timesheet Received
+                endpoints.MapControllerRoute(
+                    name: "timesheet_received_route",
+                    pattern: "{controller=Timesheet}/{action=Received}/");
             });
         }
     }
