@@ -32,7 +32,7 @@ namespace AdminUI.Tests
         public void IndexTest_IsNotNull()
         {
             var hc = new HomeController(_logger, _dbcontext);
-            var result = (ViewResult)hc.Index("sortOrder", "pName", "cName", "01/01/2020", "01/14/2020", "123456", "1");
+            var result = (ViewResult)hc.Index("sortOrder", "pName", "cName", "01/01/2020", "01/14/2020", "123456", "1", "P123456");
             Assert.IsNotNull(result.ViewData);
         }
     }
