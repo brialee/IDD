@@ -99,7 +99,8 @@ import axios from 'axios'
 			upload() {
         console.log(this.files)
         console.log('https://iddappserver.azurewebsites.net/')
-				axios.post('https://iddappserver.azurewebsites.net/ImageUpload', this.files)
+				axios.post('https://clownedpineapple.azurewebsites.net/api/HttpTrigger2?code=01sWzhyR/lezKX8pqrLGcbyRG26qgyM0VGxPfyYm9x3WeJXKjOeDsg==',
+					this.files)
 			},
 			inputChanged() {
 				console.log(this.files)
