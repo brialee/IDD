@@ -98,8 +98,8 @@ import axios from 'axios'
 			},
 			upload() {
         console.log(this.files)
-        console.log('https://clownedpineapple.azurewebsites.net/api/HttpTrigger2?code=01sWzhyR/lezKX8pqrLGcbyRG26qgyM0VGxPfyYm9x3WeJXKjOeDsg==')
-				axios.post('https://clownedpineapple.azurewebsites.net/api/HttpTrigger2?code=01sWzhyR/lezKX8pqrLGcbyRG26qgyM0VGxPfyYm9x3WeJXKjOeDsg==',
+				console.log('https://iddappserver.azurewebsites.net/ImageUpload/DocAsForm')
+				axios.post('https://iddappserver.azurewebsites.net/ImageUpload/DocAsForm',
 					this.files)
 			},
 			inputChanged() {
