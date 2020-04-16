@@ -27,7 +27,7 @@
 	<div class="example-btn">
 		<file-upload
           class="btn btn-primary"
-					post-action="https://iddappserver.azurewebsites.net/ImageUpload"
+					post-action="https://iddappserver.azurewebsites.net/ImageUpload/DocAsForm"
           :multiple="true"
           :drop="true"
           :drop-directory="true"
