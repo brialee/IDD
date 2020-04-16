@@ -98,8 +98,8 @@ import axios from 'axios'
 			},
 			upload() {
         console.log(this.files)
-        console.log('https://iddappserver.azurewebsites.net/')
-				axios.post('https://clownedpineapple.azurewebsites.net/api/HttpTrigger1?code=amZ51qGYCfuLgelHpVFn1oyB3M/iEwHpunUAaTc5JOo/z6QUHNKWkQ==',
+        console.log('https://clownedpineapple.azurewebsites.net/api/HttpTrigger2?code=01sWzhyR/lezKX8pqrLGcbyRG26qgyM0VGxPfyYm9x3WeJXKjOeDsg==')
+				axios.post('https://clownedpineapple.azurewebsites.net/api/HttpTrigger2?code=01sWzhyR/lezKX8pqrLGcbyRG26qgyM0VGxPfyYm9x3WeJXKjOeDsg==',
 					this.files)
 			},
 			inputChanged() {
