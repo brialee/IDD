@@ -19,19 +19,14 @@ namespace Appserver.Controllers
         {
             Response.Headers.Add("Allow", "POST");
 
-            // Total upload size
-            long size = files.Sum(f => f.Length);
-
             // MIME types for image processing
             var image_types = new List<string>();
             image_types.Add("image/jpeg");
             image_types.Add("image/png");
-            image_types.Add("image/tiff");
 
-            //List of file upload times
+            List<String> textract_responses = new List<string>();
+            List<String> skipped_files = new List<string>();
             List<String> stats = new List<string>();
-
-            List<String> message = new List<string>();
 
             // Iterate over list of submitted documents
             foreach (var file in files)
@@ -47,7 +42,7 @@ namespace Appserver.Controllers
                         stopwatch.Start();
 
                         var res = await pass_to_textract(file);
-                        message.Add(res);
+                        textract_responses.Add(res);
 
                         stopwatch.Stop();
                         TimeSpan ts = stopwatch.Elapsed;
@@ -72,14 +67,20 @@ namespace Appserver.Controllers
                     // Skip unhandled MIME types
                     else
                     {
-                        var s = "Skipping MIME Type " + file.ContentType;
-                        s += " having file name " + file.FileName;
-                        Debug.WriteLine(s);
+                        skipped_files.Add(
+                            "File name " + file.Name +
+                            " has incompatible type " + file.ContentType
+                            );
                     }
                 }
             }
 
-            return Ok(new { count = files.Count, total_size = size, upload_times = stats, msg = message });
+            return Json(new {
+                file_count = files.Count,
+                textract_stats = stats,
+                azfc_resp = textract_responses,
+                skipped = skipped_files}
+            );
         }
 
 
@@ -102,7 +103,7 @@ namespace Appserver.Controllers
             foreach (var file in file_collection.Files)
             {
                 // Only process image types Textract can handle
-                if (image_types.Contains(file.ContentType))
+                if (image_types.Contains(file.ContentType) && file.Length > 0)
                 {
                     //Time how long it takes Textract to process image
                     Stopwatch stopwatch = new Stopwatch();
@@ -115,7 +116,7 @@ namespace Appserver.Controllers
                     TimeSpan ts = stopwatch.Elapsed;
                     string s = String.Format("{0:00}:{1:00}", ts.Minutes, ts.Seconds);
                     stopwatch.Reset();
-                    stats.Add(file.FileName + " :: " + s);
+                    stats.Add(file.FileName + " " + s);
                 }
                 else
                 {
@@ -126,7 +127,12 @@ namespace Appserver.Controllers
                 }
             }
 
-            return Json(new { file_count = c, azfc_resp = textract_responses, skipped = skipped_files, textract_stats = stats});
+            return Json(new {
+                file_count = c,
+                azfc_resp = textract_responses,
+                skipped = skipped_files,
+                textract_stats = stats}
+            );
         }
 
 
@@ -144,7 +150,7 @@ namespace Appserver.Controllers
 
 
         // Takes an IFormFile and sends it to AWS Textract for processing.
-        private async Task<String> pass_to_textract(IFormFile file)
+        public async Task<String> pass_to_textract(IFormFile file)
         {
             // Convert file to bytes
             MemoryStream ms = new MemoryStream();
@@ -158,8 +164,8 @@ namespace Appserver.Controllers
 
             // Create HttpClient to call Azure Function
             HttpClient client = new HttpClient();
-            string functionDomain = "https://clownedpineapple.azurewebsites.net/api/";
-            string functionURI = "HttpTrigger2?code=01sWzhyR/lezKX8pqrLGcbyRG26qgyM0VGxPfyYm9x3WeJXKjOeDsg==";
+            string functionDomain = "https://clownedpineapple.azurewebsites.net";
+            string functionURI = "/api/HttpTrigger2?code=01sWzhyR/lezKX8pqrLGcbyRG26qgyM0VGxPfyYm9x3WeJXKjOeDsg==";
 
             // Wait for Azure Function response
             var response = await client.PostAsync(functionDomain + functionURI, data);
