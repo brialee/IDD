@@ -9,7 +9,7 @@ using System.Text;
 using System.Diagnostics;
 using System.Data.SqlClient;
 using Amazon.Textract;
-
+using Amazon.Textract.Model;
 
 namespace Appserver.Controllers
 {
@@ -45,6 +45,7 @@ namespace Appserver.Controllers
                     // Process image file upload
                     if (image_types.Contains(file.ContentType))
                     {
+                        process_image(file.OpenReadStream());
                         //Time how long it takes to upload image
                         Stopwatch stopwatch = new Stopwatch();
                         stopwatch.Start();
@@ -60,6 +61,8 @@ namespace Appserver.Controllers
                     // Process PDF upload
                     else if ("application/pdf".Equals(file.ContentType))
                     {
+                        process_image(file.OpenReadStream());
+
                         //Time how long it takes to upload pdf
                         Stopwatch stopwatch = new Stopwatch();
                         stopwatch.Start();
@@ -82,6 +85,19 @@ namespace Appserver.Controllers
             }
 
             return Json(new { count = files.Count, total_size = size, upload_times=stats});
+        }
+
+        // Method to generate the connection string to remote SQL Server
+        // TODO: Move db creds to something like a config file
+
+        private void process_image(Stream file)
+        {
+            var handle = new TextractHandler();
+            var response = handle.HandleAsyncJob(file);
+            foreach( var block in response.Blocks)
+            {
+                Console.WriteLine(block.ToString());
+            }
         }
 
         // Method to generate the connection string to remote SQL Server
