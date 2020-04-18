@@ -44,4 +44,4 @@ steps:
     command: 'test'
     arguments: '--no-build --configuration $(buildConfiguration)'
     publishTestResults: true
-    projects: '**/*Test.cspoj'
+    projects: '**/*Test.csproj'
