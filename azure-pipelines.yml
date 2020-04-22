@@ -9,7 +9,7 @@ pr:
       - develop
   paths:
     include:
-      - Appserver/*
+      - Appserver*/*
 
 pool:
   vmImage: 'windows-latest'
@@ -40,4 +40,4 @@ steps:
     command: 'test'
     arguments: '--no-build --configuration $(buildConfiguration)'
     publishTestResults: true
-    projects: '**/*Test.csproj'
+    projects: '**/*Test/*Test.csproj'
